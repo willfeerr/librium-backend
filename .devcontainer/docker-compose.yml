@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
+    command: sh .devcontainer/container-start.sh
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:${BOOKMARKET_API_PORT:-8000}
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_DATABASE: bookmarket
+      DB_USERNAME: bookmarket
+      DB_PASSWORD: bookmarket
+      SESSION_DRIVER: database
+      CACHE_STORE: file
+      QUEUE_CONNECTION: sync
+      BROADCAST_CONNECTION: log
+      MAIL_MAILER: log
+    volumes:
+      - ..:/var/www/html
+      - vendor:/var/www/html/vendor
+    ports:
+      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bookmarket
+      POSTGRES_USER: bookmarket
+      POSTGRES_PASSWORD: bookmarket
+    ports:
+      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookmarket -d bookmarket"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
+  vendor:

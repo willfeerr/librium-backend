@@ -1,42 +1,16 @@
 {
   "name": "BookMarket API",
   "dockerComposeFile": [
-    "../docker-compose.yml"
+    "docker-compose.yml"
   ],
   "service": "app",
   "workspaceFolder": "/var/www/html",
   "runServices": [
     "app",
-    "nginx",
-    "postgres",
-    "redis",
-    "queue",
-    "reverb"
+    "postgres"
   ],
   "shutdownAction": "stopCompose",
   "overrideCommand": false,
-  "postCreateCommand": "sh .devcontainer/post-create.sh",
-  "forwardPorts": [
-    8000,
-    5432,
-    6379,
-    8080
-  ],
-  "portsAttributes": {
-    "8000": {
-      "label": "BookMarket API",
-      "onAutoForward": "notify"
-    },
-    "5432": {
-      "label": "PostgreSQL"
-    },
-    "6379": {
-      "label": "Redis"
-    },
-    "8080": {
-      "label": "Laravel Reverb"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [

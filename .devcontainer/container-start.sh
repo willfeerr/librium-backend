@@ -7,8 +7,18 @@ if [ ! -f .env ]; then
   cp .env.example .env
 fi
 
-composer install --prefer-dist --no-interaction --no-progress || \
-  composer install --prefer-source --no-interaction --no-progress
+mkdir -p \
+  storage/app/public \
+  storage/framework/cache/data \
+  storage/framework/sessions \
+  storage/framework/views \
+  storage/logs \
+  bootstrap/cache
+
+if [ ! -f vendor/autoload.php ]; then
+  composer install --prefer-dist --no-interaction --no-progress || \
+    composer install --prefer-source --no-interaction --no-progress
+fi
 
 if ! grep -q '^APP_KEY=base64:' .env; then
   php artisan key:generate --force
@@ -31,4 +41,5 @@ done
 php artisan migrate --force
 php artisan optimize:clear
 
-echo "Dev container ready. API: http://localhost:8000/api/docs"
+echo "Laravel dev server running on http://localhost:8000"
+exec php artisan serve --host=0.0.0.0 --port=8000

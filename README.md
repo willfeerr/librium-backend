@@ -48,12 +48,51 @@ No editor, rode:
 Dev Containers: Reopen in Container
 ```
 
-O container sobe os servicos `app`, `nginx`, `postgres`, `redis`, `queue` e `reverb`, instala dependencias, cria `.env` quando necessario, gera `APP_KEY`, cria o storage link e roda as migrations.
+O container sobe apenas `app` e `postgres` para evitar pulls desnecessarios durante o bootstrap. Dentro do Dev Container, a API roda com `php artisan serve` em `localhost:8000`, `CACHE_STORE=file`, `QUEUE_CONNECTION=sync` e `BROADCAST_CONNECTION=log`.
+
+O `app` executa `.devcontainer/container-start.sh` como processo principal. Esse script instala dependencias quando necessario, cria `.env`, gera `APP_KEY`, cria o storage link, roda migrations e inicia o Laravel em `0.0.0.0:8000`.
+
+As portas sao publicadas diretamente pelo Docker Compose, sem depender do forward automatico do editor:
+
+- API: `localhost:8000`
+- PostgreSQL: `localhost:5433`
+
+Se a porta `8000` estiver ocupada, copie `.devcontainer/.env.example` para `.devcontainer/.env` e ajuste:
+
+```bash
+BOOKMARKET_API_PORT=8001
+```
 
 URLs locais:
 
 ```text
 http://localhost:8000/api/health
+http://localhost:8000/api/docs
+```
+
+Se estiver usando Remote SSH e o forward/tunnel do editor nao aparecer, diagnostique em ordem:
+
+Dentro do Dev Container:
+
+```bash
+sh .devcontainer/check-network.sh
+```
+
+No host remoto, fora do container:
+
+```bash
+sh .devcontainer/check-network.sh
+```
+
+Se o host remoto responder, mas o navegador local nao abrir, rode no seu computador:
+
+```bash
+ssh -N -L 8000:127.0.0.1:8000 usuario@host-remoto
+```
+
+Depois abra:
+
+```text
 http://localhost:8000/api/docs
 ```
 
