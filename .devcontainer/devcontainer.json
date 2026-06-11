@@ -1,0 +1,61 @@
+{
+  "name": "BookMarket API",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/var/www/html",
+  "runServices": [
+    "app",
+    "nginx",
+    "postgres",
+    "redis",
+    "queue",
+    "reverb"
+  ],
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+  "postCreateCommand": "sh .devcontainer/post-create.sh",
+  "forwardPorts": [
+    8000,
+    5432,
+    6379,
+    8080
+  ],
+  "portsAttributes": {
+    "8000": {
+      "label": "BookMarket API",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL"
+    },
+    "6379": {
+      "label": "Redis"
+    },
+    "8080": {
+      "label": "Laravel Reverb"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "onecentlin.laravel-blade",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "mikestead.dotenv",
+        "humao.rest-client",
+        "ms-azuretools.vscode-docker",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "intelephense.environment.phpVersion": "8.3.0",
+        "editor.formatOnSave": true,
+        "files.eol": "\n",
+        "terminal.integrated.defaultProfile.linux": "sh"
+      }
+    }
+  }
+}

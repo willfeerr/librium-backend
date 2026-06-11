@@ -38,6 +38,31 @@ OpenAPI JSON:
 http://localhost:8000/api/docs/openapi.json
 ```
 
+## Dev Container
+
+O projeto inclui `.devcontainer/` para VS Code/Cursor.
+
+No editor, rode:
+
+```text
+Dev Containers: Reopen in Container
+```
+
+O container sobe os servicos `app`, `nginx`, `postgres`, `redis`, `queue` e `reverb`, instala dependencias, cria `.env` quando necessario, gera `APP_KEY`, cria o storage link e roda as migrations.
+
+URLs locais:
+
+```text
+http://localhost:8000/api/health
+http://localhost:8000/api/docs
+```
+
+Para popular dados de exemplo:
+
+```bash
+php artisan db:seed --force
+```
+
 ## Deploy no Coolify
 
 Use `docker-compose.coolify.yml` no Coolify. O `docker-compose.yml` principal e para desenvolvimento local e usa bind mounts (`.:/var/www/html` e config do Nginx), que podem falhar em deploy com erro de mount.
