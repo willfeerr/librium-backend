@@ -8,7 +8,7 @@ services:
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
-      APP_URL: http://localhost:${BOOKMARKET_API_PORT:-8000}
+      APP_URL: http://localhost:${BOOKMARKET_API_PORT:-18080}
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: "5432"
@@ -24,7 +24,7 @@ services:
       - ..:/var/www/html
       - vendor:/var/www/html/vendor
     ports:
-      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_API_PORT:-8000}:8000"
+      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_API_PORT:-18080}:8000"
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/health >/dev/null || exit 1"]
       interval: 10s
@@ -41,7 +41,7 @@ services:
       POSTGRES_USER: bookmarket
       POSTGRES_PASSWORD: bookmarket
     ports:
-      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_DB_PORT:-5433}:5432"
+      - "${BOOKMARKET_BIND_IP:-127.0.0.1}:${BOOKMARKET_DB_PORT:-15432}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bookmarket -d bookmarket"]
       interval: 10s

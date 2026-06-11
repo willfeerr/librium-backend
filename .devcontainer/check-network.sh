@@ -3,8 +3,8 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-api_port="${BOOKMARKET_API_PORT:-8000}"
-db_port="${BOOKMARKET_DB_PORT:-5433}"
+api_port="${BOOKMARKET_API_PORT:-18080}"
+db_port="${BOOKMARKET_DB_PORT:-15432}"
 
 echo "== BookMarket Dev Container network check =="
 echo

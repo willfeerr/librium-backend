@@ -41,5 +41,5 @@ done
 php artisan migrate --force
 php artisan optimize:clear
 
-echo "Laravel dev server running on http://localhost:8000"
+echo "Laravel dev server running inside container on http://127.0.0.1:8000"
 exec php artisan serve --host=0.0.0.0 --port=8000
