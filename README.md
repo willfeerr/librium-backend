@@ -38,6 +38,59 @@ OpenAPI JSON:
 http://localhost:8000/api/docs/openapi.json
 ```
 
+## Deploy no Coolify
+
+Use `docker-compose.coolify.yml` no Coolify. O `docker-compose.yml` principal e para desenvolvimento local e usa bind mounts (`.:/var/www/html` e config do Nginx), que podem falhar em deploy com erro de mount.
+
+No Coolify, configure:
+
+- Compose file: `docker-compose.coolify.yml`
+- Service exposto: `nginx`
+- Porta HTTP: `80`
+- Dominio: `https://perrin.skrbe.com`
+
+Variaveis obrigatorias/recomendadas:
+
+Todas as variaveis abaixo tambem estao expostas no `docker-compose.coolify.yml` com defaults (`${VAR:-default}`), para preencher direto no painel do Coolify. Use `.env.coolify.example` como base.
+
+```env
+APP_NAME=BookMarket
+APP_ENV=production
+APP_KEY=base64:gere-uma-chave-segura
+APP_DEBUG=false
+APP_URL=https://perrin.skrbe.com
+
+DB_CONNECTION=pgsql
+DB_HOST=postgres
+DB_PORT=5432
+DB_DATABASE=bookmarket
+DB_USERNAME=bookmarket
+DB_PASSWORD=troque-esta-senha
+
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=database
+BROADCAST_CONNECTION=reverb
+REDIS_HOST=redis
+
+SANCTUM_STATEFUL_DOMAINS=perrin.skrbe.com
+CORS_ALLOWED_ORIGINS=https://perrin.skrbe.com
+SESSION_SECURE_COOKIE=true
+```
+
+Gere `APP_KEY` com:
+
+```bash
+printf 'base64:' && openssl rand -base64 32
+```
+
+Depois do deploy, valide:
+
+```text
+https://perrin.skrbe.com/api/health
+https://perrin.skrbe.com/api/docs
+```
+
 ## Testes
 
 ```bash
